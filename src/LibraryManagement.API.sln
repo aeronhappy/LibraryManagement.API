@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManagement.API", "LibraryManagement.API\LibraryManagement.API.csproj", "{8D7480EA-A5F8-4307-977B-79F88235D1DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C44AD739-F1CA-4BCD-B04D-7CBBADFC8318}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D7480EA-A5F8-4307-977B-79F88235D1DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D7480EA-A5F8-4307-977B-79F88235D1DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D7480EA-A5F8-4307-977B-79F88235D1DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D7480EA-A5F8-4307-977B-79F88235D1DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8D7480EA-A5F8-4307-977B-79F88235D1DD} = {C44AD739-F1CA-4BCD-B04D-7CBBADFC8318}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {63ADC9ED-4F1D-4099-A3DB-A5EA6FD78991}
+	EndGlobalSection
+EndGlobal
