@@ -1,6 +1,6 @@
 ﻿namespace LibraryManagement.API.DTOs.Request
 {
-    public class AddNewBook
+    public class AddBookRequest
     {
         public required string Title { get; set; }
         public required string Author { get; set; }

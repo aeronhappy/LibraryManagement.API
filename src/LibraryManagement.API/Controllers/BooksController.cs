@@ -52,7 +52,7 @@ namespace LibraryManagement.API.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<BookResponse>> AddNewBook(AddNewBook addNewBook)
+        public async Task<ActionResult<BookResponse>> AddNewBook(AddBookRequest addNewBook)
         {
             var bookResponse = await _bookService.AddBookAsync(title: addNewBook.Title, author: addNewBook.Author, isbn: addNewBook.ISBN);
             return Ok(bookResponse.Value);
@@ -73,7 +73,7 @@ namespace LibraryManagement.API.Controllers
         }
 
         [HttpPut("{bookId}")]
-        public async Task<ActionResult> UpdateBook(Guid bookId, AddNewBook newBook)
+        public async Task<ActionResult> UpdateBook(Guid bookId, AddBookRequest newBook)
         {
             Result result = await _bookService.UpdateBookAsync(bookId, newBook.Title, newBook.Author, newBook.ISBN);
             if (result.HasError<EntityNotFoundError>(out var errors))

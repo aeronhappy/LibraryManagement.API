@@ -2,7 +2,7 @@
 
 namespace LibraryManagement.API.DTOs.Request
 {
-    public class CreateMemberRequest
+    public class AddMemberRequest
     {
         public required string Name { get; set; }
 

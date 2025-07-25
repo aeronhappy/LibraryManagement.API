@@ -84,5 +84,10 @@ namespace LibraryManagement.API.Repositories.Implementation
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task SaveChangeAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

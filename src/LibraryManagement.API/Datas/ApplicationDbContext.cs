@@ -9,8 +9,18 @@ namespace LibraryManagement.API.Datas
         {
 
         }
-        public DbSet<Member> Members { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+             .HasMany(u => u.Roles)
+             .WithMany(r => r.Users);
+            base.OnModelCreating(modelBuilder);
+         
+        }
+        public DbSet<Member> Members { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

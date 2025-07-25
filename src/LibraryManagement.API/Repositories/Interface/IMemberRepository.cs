@@ -11,5 +11,6 @@ namespace LibraryManagement.API.Repositories.Interface
         Task UpdateMemberAsync(Guid id, string name, string email);
         Task AddBorrowedBookAsync(Guid id, Book borrowedBook);
         Task RemoveBorrowedBookAsync(Guid id, Book borrowedBook);
+        Task SaveChangeAsync();
     }
 }

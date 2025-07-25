@@ -36,7 +36,7 @@ namespace LibraryManagement.API.Controllers
         }
 
         [HttpPost()]
-        public async Task<ActionResult<MemberResponse>> CreateMember(CreateMemberRequest createMember)
+        public async Task<ActionResult<MemberResponse>> CreateMember(AddMemberRequest createMember)
         {
             var memberResponse = await _memberService.CreateMemberAsync(createMember.Name, createMember.Email);
             return Ok(memberResponse.Value);
@@ -56,7 +56,7 @@ namespace LibraryManagement.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateMember(Guid id, CreateMemberRequest createMember)
+        public async Task<ActionResult> UpdateMember(Guid id, AddMemberRequest createMember)
         {
             Result result =   await _memberService.UpdateMemberAsync(id, createMember.Name, createMember.Email);
             if (result.HasError<EntityNotFoundError>(out var errors))
