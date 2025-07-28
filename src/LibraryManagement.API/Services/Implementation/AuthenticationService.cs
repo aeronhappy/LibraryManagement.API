@@ -103,6 +103,7 @@ namespace LibraryManagement.API.Services.Implementation
                 Id = Guid.NewGuid(),
                 Name = user.Name,
                 Email = user.Email,
+                MaxBooksAllowed = 5,
                 BorrowedBooksCount = 0,
                 BorrowedBooks = []
             };
