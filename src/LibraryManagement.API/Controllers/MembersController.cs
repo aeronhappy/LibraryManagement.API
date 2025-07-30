@@ -1,10 +1,11 @@
 ﻿using FluentResults;
-using LibraryManagement.API.DTOs.Request;
-using LibraryManagement.API.DTOs.Response;
-using LibraryManagement.API.Errors;
+using LibraryManagement.API.Request;
 using LibraryManagement.API.Services.Interface;
-using Microsoft.AspNetCore.Http;
+using LibraryManagement.Application.Errors;
+using LibraryManagement.Application.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LibraryManagement.API.Controllers
 {
@@ -12,8 +13,8 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
-        private IMemberService _memberService;
-        public MembersController(IMemberService memberService)
+        private IMemberCommandService _memberService;
+        public MembersController(IMemberCommandService memberService)
         {
             _memberService = memberService;
         }
@@ -23,6 +24,20 @@ namespace LibraryManagement.API.Controllers
         {
             var listOfMembers = await _memberService.GetAllMemberesAsync(searchText);
             return Ok(listOfMembers);
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<MemberResponse>> GetMyAccount()
+        {
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var newGuid = Guid.Parse(userId!);
+            var memberResponse = await _memberService.GetMemberByIdAsync(newGuid);
+            if (memberResponse is null)
+                return NotFound();
+
+            return Ok(memberResponse);
         }
 
         [HttpGet("{id}")]
@@ -42,6 +57,7 @@ namespace LibraryManagement.API.Controllers
             return Ok(memberResponse.Value);
         }
 
+        [Authorize(Roles = "Librarian")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<MemberResponse>> DeleteMember(Guid id)
         {

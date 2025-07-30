@@ -1,12 +1,6 @@
-﻿using FluentResults;
-using LibraryManagement.API.Datas.Models;
-using LibraryManagement.API.DTOs.Request;
-using LibraryManagement.API.DTOs.Response;
-using LibraryManagement.API.Errors;
-using LibraryManagement.API.Services;
-using LibraryManagement.API.Services.Interface;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using LibraryManagement.API.Request;
+using LibraryManagement.Application.Commands;
+using LibraryManagement.Application.Response;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -16,9 +10,9 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthenticationCommandService _authenticationService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationCommandService authenticationService)
         {
             _authenticationService = authenticationService;
         }
@@ -31,7 +25,7 @@ namespace LibraryManagement.API.Controllers
                 await _authenticationService.RegisterAsync(request.Name, request.Email, request.Password, request.RolesId);
             return Ok(response);
         }
-
+       
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {

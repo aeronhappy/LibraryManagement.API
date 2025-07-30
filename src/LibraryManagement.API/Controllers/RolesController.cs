@@ -1,10 +1,10 @@
 ﻿using FluentResults;
 using LibraryManagement.API.Datas.Models;
 using LibraryManagement.API.DTOs.Request;
-using LibraryManagement.API.DTOs.Response;
 using LibraryManagement.API.Errors;
 using LibraryManagement.API.Services;
 using LibraryManagement.API.Services.Interface;
+using LibraryManagement.Application.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +15,8 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly IRoleService _roleService;
-        public RolesController(IRoleService roleService)
+        private readonly IRoleCommandService _roleService;
+        public RolesController(IRoleCommandService roleService)
         {
             _roleService = roleService;
         }

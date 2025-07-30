@@ -1,9 +1,9 @@
 ﻿using FluentResults;
-using LibraryManagement.API.DTOs.Request;
-using LibraryManagement.API.DTOs.Response;
 using LibraryManagement.API.Errors;
+using LibraryManagement.API.Request;
 using LibraryManagement.API.Services;
 using LibraryManagement.API.Services.Interface;
+using LibraryManagement.Application.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,8 +13,8 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IBookService _bookService;
-        public BooksController(IBookService bookService)
+        private readonly IBookCommandService _bookService;
+        public BooksController(IBookCommandService bookService)
         {
             _bookService = bookService;
         }
@@ -26,6 +26,7 @@ namespace LibraryManagement.API.Controllers
             return Ok(listOfBooks);
         }
 
+        
         [HttpGet("available")]
         public async Task<ActionResult<List<BookResponse>>> GetAllAvailableBooks([FromQuery] string searchText = "")
         {
