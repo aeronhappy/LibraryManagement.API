@@ -1,12 +1,7 @@
 ﻿using FluentResults;
-using LibraryManagement.API.Datas.Models;
-using LibraryManagement.API.DTOs.Request;
-using LibraryManagement.API.Errors;
-using LibraryManagement.API.Services;
 using LibraryManagement.API.Services.Interface;
+using LibraryManagement.Application.Errors;
 using LibraryManagement.Application.Response;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.API.Controllers

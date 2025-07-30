@@ -1,6 +1,4 @@
-﻿using LibraryManagement.API.Datas.Models;
-using LibraryManagement.API.DTOs.Response;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagement.API.Request
 {

@@ -1,10 +1,8 @@
 ﻿using FluentResults;
-using LibraryManagement.API.Errors;
 using LibraryManagement.API.Request;
-using LibraryManagement.API.Services;
 using LibraryManagement.API.Services.Interface;
+using LibraryManagement.Application.Errors;
 using LibraryManagement.Application.Response;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.API.Controllers
@@ -37,8 +35,8 @@ namespace LibraryManagement.API.Controllers
         [HttpGet("overdue")]
         public async Task<ActionResult<List<BookResponse>>> GetOverdueBooks([FromQuery] string searchText = "")
         {
-            var listOfBooks = await _bookService.GetOverdueBooksAsync(searchText);
-            return Ok(listOfBooks);
+            //var listOfBooks = await _bookService.GetOverdueBooksAsync(searchText);
+            return Ok();
         }
 
 
@@ -88,14 +86,14 @@ namespace LibraryManagement.API.Controllers
         public async Task<ActionResult> BorrowBook( Guid bookId, [FromQuery]Guid memberId)
         {
 
-            Result result = await _bookService.AddBorrowBookAsync(memberId, bookId);
+            //Result result = await _bookService.AddBorrowBookAsync(memberId, bookId);
 
-            if (result.HasError<EntityNotFoundError>(out var errors))
-                return NotFound(errors.FirstOrDefault()?.Message);
-            else if (result.HasError<MemberReachLimitError>(out var reachLimitErrors))
-                return BadRequest(reachLimitErrors.FirstOrDefault()?.Message);
-            else if (result.HasError<BookUnavailableError>(out var bookUnavailableErrors))
-                return BadRequest(bookUnavailableErrors.FirstOrDefault()?.Message);
+            //if (result.HasError<EntityNotFoundError>(out var errors))
+            //    return NotFound(errors.FirstOrDefault()?.Message);
+            //else if (result.HasError<MemberReachLimitError>(out var reachLimitErrors))
+            //    return BadRequest(reachLimitErrors.FirstOrDefault()?.Message);
+            //else if (result.HasError<BookUnavailableError>(out var bookUnavailableErrors))
+            //    return BadRequest(bookUnavailableErrors.FirstOrDefault()?.Message);
 
             return Ok();
 
@@ -105,10 +103,10 @@ namespace LibraryManagement.API.Controllers
         public async Task<ActionResult> ReturnBook( Guid bookId, [FromQuery] Guid memberId)
         {
 
-            Result result = await _bookService.ReturnBorrowBookAsync(memberId, bookId);
+            //Result result = await _bookService.ReturnBorrowBookAsync(memberId, bookId);
 
-            if (result.HasError<EntityNotFoundError>(out var errors))
-                return NotFound(errors.FirstOrDefault()?.Message);
+            //if (result.HasError<EntityNotFoundError>(out var errors))
+            //    return NotFound(errors.FirstOrDefault()?.Message);
 
             return Ok();
 
