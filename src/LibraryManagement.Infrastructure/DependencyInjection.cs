@@ -1,6 +1,4 @@
 ﻿using LibraryManagement.API.Repositories;
-using LibraryManagement.Application.CommandHandler;
-using LibraryManagement.Application.Commands;
 using LibraryManagement.Application.Services;
 using LibraryManagement.Domain.Repositories;
 using LibraryManagement.Infrastructure.Configurations;
@@ -29,33 +27,26 @@ namespace LibraryManagement.Infrastructure
             });
 
             //Register JWTSETIINGS
-            var jwtSettings = new JwtSettings
-            {
-                Issuer = configuration["JwtSettings:Issuer"] ?? string.Empty,
-                Audience = configuration["JwtSettings:Audience"] ?? string.Empty,
-                Key = configuration["JwtSettings:Key"] ?? string.Empty
-            };
-           configuration.Bind("JwtSettings", jwtSettings);
-           services.AddSingleton(jwtSettings);
+            JwtSettings jwtSettings = new JwtSettings();
+            configuration.Bind("JwtSettings", jwtSettings);
+            services.AddSingleton(jwtSettings);
             services.AddAuthentication("Bearer")
-                 .AddJwtBearer("Bearer", options =>
-                 {
-                     TokenValidationParameters tokenValidationParameters = new TokenValidationParameters
-                     {
-                         ValidateIssuer = true,
-                         ValidateAudience = true,
-                         ValidateLifetime = true,
-                         ValidateIssuerSigningKey = true,
-                         ValidIssuer = jwtSettings.Issuer,
-                         ValidAudience = jwtSettings.Audience,
-                         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSettings.Key))
-                     };
+                .AddJwtBearer("Bearer", options =>
+                {
+                    TokenValidationParameters tokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidAudience = jwtSettings.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSettings.Key))
+                    };
 
-                     options.TokenValidationParameters = tokenValidationParameters;
-                 });
+                    options.TokenValidationParameters = tokenValidationParameters;
+                });
 
-            //Register Mapping Profile
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // Register Repositories
            services.AddScoped<IMemberRepository, MemberRepository>();
@@ -63,6 +54,7 @@ namespace LibraryManagement.Infrastructure
            services.AddScoped<IUserRepository, UserRepository>();
            services.AddScoped<IRoleRepository, RoleRepository>();
            services.AddScoped<IBorrowingRecordRepository, BorrowingRecordRepository>();
+           services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 

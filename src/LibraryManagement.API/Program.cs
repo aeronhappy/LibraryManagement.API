@@ -1,10 +1,10 @@
-using Microsoft.OpenApi.Models;
-using LibraryManagement.Infrastructure;
 using LibraryManagement.Application;
+using LibraryManagement.Infrastructure;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Output the current culture (for debugging)
+
 Console.WriteLine(System.Globalization.CultureInfo.CurrentCulture.Name);
 
 // Add services to the container
@@ -39,6 +39,11 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
+//Register Mapping Profile
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+
 // CORS
 builder.Services.AddCors(options =>
 {
@@ -52,10 +57,6 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
-
-
-
-
 
 
 
