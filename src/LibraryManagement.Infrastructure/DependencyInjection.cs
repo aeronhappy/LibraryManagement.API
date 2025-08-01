@@ -4,7 +4,6 @@ using LibraryManagement.Domain.Repositories;
 using LibraryManagement.Infrastructure.Configurations;
 using LibraryManagement.Infrastructure.Data;
 using LibraryManagement.Infrastructure.Data.Repositories;
-using LibraryManagement.Infrastructure.MappingProfile;
 using LibraryManagement.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

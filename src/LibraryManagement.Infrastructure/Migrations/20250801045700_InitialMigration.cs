@@ -3,14 +3,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace LibraryManagement.API.Migrations
+namespace LibraryManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AuthenticationMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsBorrowed = table.Column<bool>(type: "bit", nullable: false),
+                    DateBorrowed = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Members",
                 columns: table => new
@@ -45,7 +61,9 @@ namespace LibraryManagement.API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,26 +71,31 @@ namespace LibraryManagement.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "BorrowingRecords",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsBorrowed = table.Column<bool>(type: "bit", nullable: false),
-                    BorrowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DateBorrowed = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    BorrowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DateBorrowed = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOverdue = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateReturned = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_BorrowingRecords", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Members_BorrowerId",
+                        name: "FK_BorrowingRecords_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BorrowingRecords_Members_BorrowerId",
                         column: x => x.BorrowerId,
                         principalTable: "Members",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,8 +123,13 @@ namespace LibraryManagement.API.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_BorrowerId",
-                table: "Books",
+                name: "IX_BorrowingRecords_BookId",
+                table: "BorrowingRecords",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BorrowingRecords_BorrowerId",
+                table: "BorrowingRecords",
                 column: "BorrowerId");
 
             migrationBuilder.CreateIndex(
@@ -114,10 +142,13 @@ namespace LibraryManagement.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "BorrowingRecords");
 
             migrationBuilder.DropTable(
                 name: "RoleUser");
+
+            migrationBuilder.DropTable(
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Members");

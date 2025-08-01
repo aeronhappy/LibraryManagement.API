@@ -9,8 +9,11 @@
     
         public MemberMappingProfile()
         {
-            CreateMap<Member, MemberResponse>();
-            CreateMap<Member, BorrowerResponse>();
+            CreateMap<Member, MemberResponse>()
+                 .ForMember(m => m.Id, option => option.MapFrom(m => m.Id.Value)); 
+
+            CreateMap<Member, BorrowerResponse>()
+                 .ForMember(m => m.Id, option => option.MapFrom(m => m.Id.Value)); 
         }
     }
 }

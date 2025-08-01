@@ -11,15 +11,24 @@ namespace LibraryManagement.Domain.Entities
         public required string ISBN { get; set; }
         public bool IsBorrowed { get; set; }
         public DateTime? DateBorrowed { get; set; }
+        public MemberId? BorrowerId { get; set; }
+        public Member? Borrower { get; set; }
+        public DateTime? DateOverdue { get; set; }
 
 
-        public void MarkAsBorrowed()
+
+
+        public void MarkAsBorrowed(BorrowingRecord borrowingRecord)
         {
             if (IsBorrowed)
             {
                 throw new BookUnavailableException("This book is already borrowed.");
             }
             IsBorrowed = true;
+            DateBorrowed = DateTime.UtcNow;
+            BorrowerId = borrowingRecord.BorrowerId;
+            DateOverdue= borrowingRecord.DateOverdue;
+
         }
 
         public void MarkAsReturned()
@@ -29,6 +38,9 @@ namespace LibraryManagement.Domain.Entities
                 throw new BookAlreadyReturnedException("This book is not borrowed.");
             }
             IsBorrowed = false;
+            DateBorrowed = null;
+            BorrowerId = null;
+            DateOverdue = null;
         }
 
     }

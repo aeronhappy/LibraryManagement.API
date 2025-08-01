@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LibraryManagement.API.Migrations
+namespace LibraryManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250725061438_AuthenticationMigration")]
-    partial class AuthenticationMigration
+    [Migration("20250801065433_UpdateBook")]
+    partial class UpdateBook
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,9 @@ namespace LibraryManagement.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LibraryManagement.API.Datas.Models.Book", b =>
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.Book", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Author")
@@ -41,7 +40,7 @@ namespace LibraryManagement.API.Migrations
                     b.Property<DateTime?>("DateBorrowed")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DueDate")
+                    b.Property<DateTime?>("DateOverdue")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ISBN")
@@ -62,10 +61,38 @@ namespace LibraryManagement.API.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("LibraryManagement.API.Datas.Models.Member", b =>
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.BorrowingRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BorrowerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateBorrowed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOverdue")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateReturned")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("BorrowerId");
+
+                    b.ToTable("BorrowingRecords");
+                });
+
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.Member", b =>
+                {
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("BorrowedBooksCount")
@@ -87,10 +114,9 @@ namespace LibraryManagement.API.Migrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("LibraryManagement.API.Datas.Models.Role", b =>
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -102,15 +128,20 @@ namespace LibraryManagement.API.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("LibraryManagement.API.Datas.Models.User", b =>
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastLogin")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -140,33 +171,52 @@ namespace LibraryManagement.API.Migrations
                     b.ToTable("RoleUser");
                 });
 
-            modelBuilder.Entity("LibraryManagement.API.Datas.Models.Book", b =>
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.Book", b =>
                 {
-                    b.HasOne("LibraryManagement.API.Datas.Models.Member", "Borrower")
-                        .WithMany("BorrowedBooks")
+                    b.HasOne("LibraryManagement.Domain.Entities.Member", "Borrower")
+                        .WithMany("Books")
                         .HasForeignKey("BorrowerId");
+
+                    b.Navigation("Borrower");
+                });
+
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.BorrowingRecord", b =>
+                {
+                    b.HasOne("LibraryManagement.Domain.Entities.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibraryManagement.Domain.Entities.Member", "Borrower")
+                        .WithMany()
+                        .HasForeignKey("BorrowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
 
                     b.Navigation("Borrower");
                 });
 
             modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.HasOne("LibraryManagement.API.Datas.Models.Role", null)
+                    b.HasOne("LibraryManagement.Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryManagement.API.Datas.Models.User", null)
+                    b.HasOne("LibraryManagement.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LibraryManagement.API.Datas.Models.Member", b =>
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.Member", b =>
                 {
-                    b.Navigation("BorrowedBooks");
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

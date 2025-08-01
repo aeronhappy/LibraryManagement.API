@@ -9,7 +9,9 @@ namespace LibraryManagement.API.Profiles
     {
         public UserMappingProfile()
         {
-            CreateMap<User, UserResponse>();
+            CreateMap<User, UserResponse>()
+                .ForMember(u => u.Id, option => option.MapFrom(u => u.Id.Value));
+
         }
     }
 }

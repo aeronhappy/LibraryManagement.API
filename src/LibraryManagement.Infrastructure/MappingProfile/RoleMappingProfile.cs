@@ -9,8 +9,8 @@ namespace LibraryManagement.API.Profiles
     {
         public RoleMappingProfile()
         {
-            CreateMap<Role, RoleResponse>(); 
-            CreateMap<RoleResponse, Role>();
+            CreateMap<Role, RoleResponse>()
+                .ForMember(r => r.Id, option => option.MapFrom(r => r.Id.Value));
         }
     }
 }

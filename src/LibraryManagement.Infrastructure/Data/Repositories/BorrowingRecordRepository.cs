@@ -4,7 +4,7 @@ using LibraryManagement.Domain.ValueObjects;
 using LibraryManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryManagement.Infrastructure.MappingProfile
+namespace LibraryManagement.Infrastructure.Data.Repositories
 {
     public class BorrowingRecordRepository : IBorrowingRecordRepository
     {

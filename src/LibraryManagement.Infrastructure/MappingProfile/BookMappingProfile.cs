@@ -9,7 +9,8 @@ namespace LibraryManagement.API.Profiles
     {
         public BookMappingProfile()
         {
-            CreateMap<Book, BookResponse>();
+            CreateMap<Book, BookResponse>()
+                .ForMember(b => b.Id, option=> option.MapFrom(b=>b.Id.Value));
         }
     }
 }
