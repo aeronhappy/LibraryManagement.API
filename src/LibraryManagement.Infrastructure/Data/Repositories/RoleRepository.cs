@@ -30,10 +30,7 @@ namespace LibraryManagement.API.Repositories
             return await _context.Roles.FindAsync(id);
         }
 
-        public async Task SaveChangeAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
+    
 
     }
 }

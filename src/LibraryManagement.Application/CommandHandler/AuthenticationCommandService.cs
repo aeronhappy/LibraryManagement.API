@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LibraryManagement.Application.Commands;
+﻿using LibraryManagement.Application.Commands;
 using LibraryManagement.Application.Response;
 using LibraryManagement.Application.Services;
 using LibraryManagement.Domain.Entities;
@@ -13,25 +12,19 @@ namespace LibraryManagement.Application.CommandHandler
 
         private readonly IPasswordService _passwordService;
         private readonly ITokenService _tokenService;
-        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
         public AuthenticationCommandService(
             IPasswordService passwordService,
             ITokenService tokenService,
-            IMapper mapper,
-            IUnitOfWork unitOfWork
-            )
-
+            IUnitOfWork unitOfWork)
 
         {
-         
             _passwordService = passwordService;
             _tokenService = tokenService;
-            _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<AuthenticationResponse> SignInAsync(string email, string password)
+        public async Task<AuthenticationResponse> SignInAsync(string email, string password, CancellationToken cancellationToken)
         {
             User? existingUser = await _unitOfWork.Users.GetByEmailAsync(email);
             if (existingUser is null)
@@ -52,7 +45,7 @@ namespace LibraryManagement.Application.CommandHandler
                 };
             }
             existingUser.UpdateLastLogin(DateTime.UtcNow);
-            await _unitOfWork.SaveChangesAsync(default);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return new AuthenticationResponse
             {
                 IsSuccess = true,
@@ -61,7 +54,7 @@ namespace LibraryManagement.Application.CommandHandler
             };
         }
 
-        public async Task<AuthenticationResponse> RegisterAsync(string name, string email, string password, List<Guid> rolesId)
+        public async Task<AuthenticationResponse> RegisterAsync(string name, string email, string password, List<Guid> rolesId, CancellationToken cancellationToken)
         {
             User? existingUser = await _unitOfWork.Users.GetByEmailAsync(email);
             if (existingUser is not null)
@@ -101,7 +94,7 @@ namespace LibraryManagement.Application.CommandHandler
                
             };
             await _unitOfWork.Members.CreateMemberAsync(newMember);
-            await _unitOfWork.SaveChangesAsync(default);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             string accessToken = _tokenService.GenerateToken(user);
             return new AuthenticationResponse
@@ -113,19 +106,5 @@ namespace LibraryManagement.Application.CommandHandler
         }
 
 
-        public async Task<UserResponse?> GetUserByIdAsync(Guid id)
-        {
-            UserResponse userResponse = await _unitOfWork.Users.GetByIdAsync(new UserId(id))
-                  .ContinueWith(t => _mapper.Map<UserResponse>(t.Result));
-            if (userResponse is null)
-                return null;
-            return userResponse;
-        }
-
-        public async Task<List<UserResponse>> GetAllUsersAsync()
-        {
-            return await _unitOfWork.Users.GetUsersAsync()
-                 .ContinueWith(t => t.Result.Select(u => _mapper.Map<UserResponse>(u)).ToList());
-        }
     }
 }

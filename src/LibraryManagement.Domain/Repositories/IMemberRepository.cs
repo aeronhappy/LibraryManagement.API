@@ -11,8 +11,6 @@ namespace LibraryManagement.Domain.Repositories
         Task CreateMemberAsync(Member memberModel);
         Task RemoveMemberAsync(MemberId id);
         Task UpdateMemberAsync(MemberId id, string name, string email);
-        //Task AddBorrowedBookAsync(Guid id, Book borrowedBook);
-        //Task RemoveBorrowedBookAsync(Guid id, Book borrowedBook);
-        //Task SaveChangeAsync();
+
     }
 }

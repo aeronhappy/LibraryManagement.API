@@ -2,6 +2,7 @@
 using LibraryManagement.API.Request;
 using LibraryManagement.API.Services.Interface;
 using LibraryManagement.Application.Errors;
+using LibraryManagement.Application.Queries;
 using LibraryManagement.Application.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,13 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IBookCommandService _bookService;
-        public BooksController(IBookCommandService bookService)
+        private readonly IBookQueryService _bookService;
+        private readonly IBookCommandSerice _bookCommand;
+
+        public BooksController(IBookQueryService bookService, IBookCommandSerice bookCommand)
         {
             _bookService = bookService;
+            _bookCommand = bookCommand;
         }
 
         [HttpGet()]
@@ -35,8 +39,9 @@ namespace LibraryManagement.API.Controllers
         [HttpGet("overdue")]
         public async Task<ActionResult<List<BookResponse>>> GetOverdueBooks([FromQuery] string searchText = "")
         {
-            //var listOfBooks = await _bookService.GetOverdueBooksAsync(searchText);
-            return Ok();
+
+            var listOfBooks = await _bookService.GetOverdueBooksAsync(searchText);
+            return Ok(listOfBooks);
         }
 
 
@@ -53,7 +58,7 @@ namespace LibraryManagement.API.Controllers
         [HttpPost("create")]
         public async Task<ActionResult<BookResponse>> AddNewBook(AddBookRequest addNewBook)
         {
-            var bookResponse = await _bookService.AddBookAsync(title: addNewBook.Title, author: addNewBook.Author, isbn: addNewBook.ISBN);
+            var bookResponse = await _bookCommand.AddBookAsync(title: addNewBook.Title, author: addNewBook.Author, isbn: addNewBook.ISBN, HttpContext.RequestAborted);
             return Ok(bookResponse.Value);
         }
 
@@ -61,7 +66,7 @@ namespace LibraryManagement.API.Controllers
         [HttpDelete("{bookId}")]
         public async Task<ActionResult> DeleteBook(Guid bookId)
         {
-            Result result = await _bookService.DeleteBookAsync(bookId);
+            Result result = await _bookCommand.DeleteBookAsync(bookId, HttpContext.RequestAborted);
             if (result.HasError<EntityNotFoundError>(out var errors))
                 return NotFound(errors.FirstOrDefault()?.Message);
             else if (result.HasError<UnableToDeleteError>(out var unableToDeleteErrors))
@@ -74,7 +79,7 @@ namespace LibraryManagement.API.Controllers
         [HttpPut("{bookId}")]
         public async Task<ActionResult> UpdateBook(Guid bookId, AddBookRequest newBook)
         {
-            Result result = await _bookService.UpdateBookAsync(bookId, newBook.Title, newBook.Author, newBook.ISBN);
+            Result result = await _bookCommand.UpdateBookAsync(bookId, newBook.Title, newBook.Author, newBook.ISBN , HttpContext.RequestAborted);
             if (result.HasError<EntityNotFoundError>(out var errors))
                 return NotFound(errors.FirstOrDefault()?.Message);
 
@@ -82,35 +87,7 @@ namespace LibraryManagement.API.Controllers
         }
 
 
-        [HttpPost("{bookId}/borrow")]
-        public async Task<ActionResult> BorrowBook( Guid bookId, [FromQuery]Guid memberId)
-        {
-
-            //Result result = await _bookService.AddBorrowBookAsync(memberId, bookId);
-
-            //if (result.HasError<EntityNotFoundError>(out var errors))
-            //    return NotFound(errors.FirstOrDefault()?.Message);
-            //else if (result.HasError<MemberReachLimitError>(out var reachLimitErrors))
-            //    return BadRequest(reachLimitErrors.FirstOrDefault()?.Message);
-            //else if (result.HasError<BookUnavailableError>(out var bookUnavailableErrors))
-            //    return BadRequest(bookUnavailableErrors.FirstOrDefault()?.Message);
-
-            return Ok();
-
-        }
-
-        [HttpPost("{bookId}/return")]
-        public async Task<ActionResult> ReturnBook( Guid bookId, [FromQuery] Guid memberId)
-        {
-
-            //Result result = await _bookService.ReturnBorrowBookAsync(memberId, bookId);
-
-            //if (result.HasError<EntityNotFoundError>(out var errors))
-            //    return NotFound(errors.FirstOrDefault()?.Message);
-
-            return Ok();
-
-        }
+      
 
     }
 }

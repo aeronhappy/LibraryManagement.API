@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FluentResults;
-using LibraryManagement.API.Services.Interface;
+using LibraryManagement.Application.Commands;
 using LibraryManagement.Application.Errors;
 using LibraryManagement.Application.Response;
 using LibraryManagement.Domain.Entities;
@@ -11,19 +11,19 @@ namespace LibraryManagement.Application.CommandHandler
 {
     public class RoleCommandService : IRoleCommandService
     {
-        private readonly IRoleRepository _roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public RoleCommandService(IRoleRepository roleRepository, IMapper mapper)
+        public RoleCommandService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<Result<RoleResponse>> CreateRoleAsync(string name)
+        public async Task<Result<RoleResponse>> CreateRoleAsync(string name, CancellationToken cancellationToken)
         {
 
-            var roles = await _roleRepository.GetAllRolesAsync();
+            var roles = await _unitOfWork.Roles.GetAllRolesAsync();
 
             if (roles.Any(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -36,24 +36,14 @@ namespace LibraryManagement.Application.CommandHandler
                 Name = name
             };
 
-            await _roleRepository.AddRoleAsync(newRole);
-            await _roleRepository.SaveChangeAsync();
+            await _unitOfWork.Roles.AddRoleAsync(newRole);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = _mapper.Map<RoleResponse>(newRole); ;
 
             return Result.Ok(response);
         }
 
-        public async Task<List<RoleResponse>> GetAllRoleAsync()
-        {
-            var roles = await _roleRepository.GetAllRolesAsync();
-            return roles.Select(r => _mapper.Map<RoleResponse>(r)).ToList();
-        }
-
-        public async Task<RoleResponse?> GetRoleByIdAsync(Guid id)
-        {
-            var role = await _roleRepository.GetRoleByIdAsync(new RoleId(id));
-            return _mapper.Map<RoleResponse>(role);
-        }
+     
     }
 }

@@ -1,7 +1,9 @@
 ﻿using FluentResults;
 using LibraryManagement.API.Request;
 using LibraryManagement.API.Services.Interface;
+using LibraryManagement.Application.Commands;
 using LibraryManagement.Application.Errors;
+using LibraryManagement.Application.Queries;
 using LibraryManagement.Application.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,16 +15,19 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
-        private IMemberCommandService _memberService;
-        public MembersController(IMemberCommandService memberService)
+        private readonly IMemberQueryService _memberQuery;
+        private readonly IMemberCommandService _memberCommand;
+
+        public MembersController(IMemberQueryService memberQuery,IMemberCommandService memberCommand)
         {
-            _memberService = memberService;
+            _memberQuery = memberQuery;
+            _memberCommand = memberCommand;
         }
 
         [HttpGet()]
         public async Task<ActionResult<List<MemberResponse>>> GetListOfMember([FromQuery] string searchText = "")
         {
-            var listOfMembers = await _memberService.GetAllMemberesAsync(searchText);
+            var listOfMembers = await _memberQuery.GetAllMemberesAsync(searchText);
             return Ok(listOfMembers);
         }
 
@@ -33,7 +38,7 @@ namespace LibraryManagement.API.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var newGuid = Guid.Parse(userId!);
-            var memberResponse = await _memberService.GetMemberByIdAsync(newGuid);
+            var memberResponse = await _memberQuery.GetMemberByIdAsync(newGuid);
             if (memberResponse is null)
                 return NotFound();
 
@@ -43,7 +48,8 @@ namespace LibraryManagement.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MemberResponse>> GetMemberById(Guid id)
         {
-            var memberResponse = await _memberService.GetMemberByIdAsync(id);
+          
+            var memberResponse = await _memberQuery.GetMemberByIdAsync(id);
             if (memberResponse is null)
                 return NotFound();
 
@@ -53,7 +59,7 @@ namespace LibraryManagement.API.Controllers
         [HttpPost()]
         public async Task<ActionResult<MemberResponse>> CreateMember(AddMemberRequest createMember)
         {
-            var memberResponse = await _memberService.CreateMemberAsync(createMember.Name, createMember.Email);
+            var memberResponse = await _memberCommand.CreateMemberAsync(createMember.Name, createMember.Email,HttpContext.RequestAborted);
             return Ok(memberResponse.Value);
         }
 
@@ -61,7 +67,7 @@ namespace LibraryManagement.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<MemberResponse>> DeleteMember(Guid id)
         {
-            Result result = await _memberService.RemoveMemberAsync(id);
+            Result result = await _memberCommand.RemoveMemberAsync(id, HttpContext.RequestAborted);
             if (result.HasError<EntityNotFoundError>(out var errors))
                 return NotFound(errors.FirstOrDefault()?.Message);
             else if (result.HasError<UnableToDeleteError>(out var unableToDeleteErrors))
@@ -74,7 +80,7 @@ namespace LibraryManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateMember(Guid id, AddMemberRequest createMember)
         {
-            Result result =   await _memberService.UpdateMemberAsync(id, createMember.Name, createMember.Email);
+            Result result =   await _memberCommand.UpdateMemberAsync(id, createMember.Name, createMember.Email, HttpContext.RequestAborted);
             if (result.HasError<EntityNotFoundError>(out var errors))
                 return NotFound(errors.FirstOrDefault()?.Message);
 

@@ -9,11 +9,11 @@ namespace LibraryManagement.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Book> book)
         {
-            book.HasKey(u => u.Id);
-            book.Property(u => u.Id)
-                .HasConversion(u => u.Value, value => new BookId(value));
-            book.Property(u => u.BorrowerId)
-                .HasConversion(u => u.Value, value => new MemberId(value));
+            book.HasKey(b => b.Id);
+            book.Property(b => b.Id)
+                .HasConversion(b => b.Value, value => new BookId(value));
+            book.Property(b => b.BorrowerId)
+                .HasConversion(b => b!.Value, value => new MemberId(value));
         }
     }
 }

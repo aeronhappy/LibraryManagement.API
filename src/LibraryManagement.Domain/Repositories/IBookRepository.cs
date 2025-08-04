@@ -12,9 +12,7 @@ namespace LibraryManagement.Domain.Repositories
         Task AddBookAsync(Book book);
         Task DeleteBookAsync(BookId id);
         Task UpdateBookAsync(BookId id, string title, string author, string isbn);
-        //Task AddBorrowBookAsync(Guid bookId, Guid memberId);
-        //Task RemoveBorrowedBookAsync(Guid bookId);
-        //Task SaveChangeAsync();
+    
 
     }
 

@@ -9,6 +9,6 @@ namespace LibraryManagement.Domain.Repositories
         Task<Role?> GetRoleByIdAsync(RoleId id);
         Task<List<Role>> GetAllRolesAsync();
         Task AddRoleAsync(Role role);
-        Task SaveChangeAsync();
+     
     }
 }

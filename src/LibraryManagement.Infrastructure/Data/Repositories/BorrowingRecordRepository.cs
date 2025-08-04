@@ -1,8 +1,10 @@
-﻿using LibraryManagement.Domain.Entities;
+﻿using AutoMapper.Execution;
+using LibraryManagement.Domain.Entities;
 using LibraryManagement.Domain.Repositories;
 using LibraryManagement.Domain.ValueObjects;
 using LibraryManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace LibraryManagement.Infrastructure.Data.Repositories
 {
@@ -18,6 +20,11 @@ namespace LibraryManagement.Infrastructure.Data.Repositories
         public async Task AddAsync(BorrowingRecord borrowingRecord)
         {
             await _context.BorrowingRecords.AddAsync(borrowingRecord);
+        }
+
+        public async Task<List<BorrowingRecord>> GetAllBorrowingRecord()
+        {
+           return await _context.BorrowingRecords.ToListAsync();
         }
 
         public async Task<BorrowingRecord?> GetByIdAsync(BorrowingRecordId id)
@@ -36,6 +43,15 @@ namespace LibraryManagement.Infrastructure.Data.Repositories
                 .Include(b => b.Borrower)
                 .Include(b => b.Book)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<BorrowingRecord?> GetLatestBorrowedRecordByBookId(BookId id)
+        {
+            return await _context.BorrowingRecords
+                 .Where(br => br.BookId == id)
+                 .Include(br => br.Book)
+                 .Include(br => br.Borrower)
+                 .FirstOrDefaultAsync();
         }
     }
 }

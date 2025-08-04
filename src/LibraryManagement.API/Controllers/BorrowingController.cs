@@ -10,17 +10,19 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class BorrowingController : ControllerBase
     {
-        private readonly IBorrowingCommandService _borrowingService;
+        private readonly IBorrowingQueryService _borrowingQuery;
+        private readonly IBorrowingCommandService _borrowingCommand;
 
-        public BorrowingController(IBorrowingCommandService borrowingCommandService)
+        public BorrowingController(IBorrowingQueryService borrowingQuery , IBorrowingCommandService borrowingCommand)
         {
-            _borrowingService = borrowingCommandService;
+            _borrowingQuery = borrowingQuery;
+            _borrowingCommand = borrowingCommand;
         }
 
         [HttpPost("books/{bookId}")]
         public async Task<ActionResult> BorrowBook(Guid bookId, [FromQuery] Guid borrowerId)
         {
-            Result result = await _borrowingService.BorrowAsync(bookId, borrowerId, HttpContext.RequestAborted);
+            Result result = await _borrowingCommand.BorrowAsync(bookId, borrowerId, HttpContext.RequestAborted);
             if (result.IsFailed)
             {
                 var error = result.Errors.First();
@@ -40,7 +42,7 @@ namespace LibraryManagement.API.Controllers
         [HttpPost("books/{bookId}/return")]
         public async Task<ActionResult> ReturnBook(Guid bookId, [FromQuery] Guid borrowerId)
         {
-            Result result = await _borrowingService.ReturnAsync(bookId, borrowerId, HttpContext.RequestAborted);
+            Result result = await _borrowingCommand.ReturnAsync(bookId, borrowerId, HttpContext.RequestAborted);
             if (result.IsFailed)
             {
                 var error = result.Errors.First();

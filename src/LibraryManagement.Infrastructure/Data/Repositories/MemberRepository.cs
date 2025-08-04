@@ -59,34 +59,6 @@ namespace LibraryManagement.API.Repositories
             member.Email = email;
 
         }
-        //public async Task AddBorrowedBookAsync(Guid id, Book borrowedBook)
-        //{
-        //    Member? member = await _context.Members.Where((x) => x.Id == id).FirstOrDefaultAsync();
-        //    if (member == null) { return; }
-
-        //    member.BorrowedBooks.Add(borrowedBook);
-        //    member.BorrowedBooksCount++;
-
-        //    await _context.SaveChangesAsync();
-        //}
-
-        //public async Task RemoveBorrowedBookAsync(Guid id, Book borrowedBook)
-        //{
-        //    Member? member = await _context.Members.Where((x) => x.Id == id).FirstOrDefaultAsync();
-        //    if (member == null) { return; }
-
-        //    if (member.BorrowedBooks.Contains(borrowedBook))
-        //    {
-        //        member.BorrowedBooks.Remove(borrowedBook);
-        //    }
-        //    member.BorrowedBooksCount--;
-
-        //    await _context.SaveChangesAsync();
-        //}
-
-        //public async Task SaveChangeAsync()
-        //{
-        //    await _context.SaveChangesAsync();
-        //}
+       
     }
 }

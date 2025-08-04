@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FluentResults;
-using LibraryManagement.API.Services.Interface;
+using LibraryManagement.Application.Commands;
 using LibraryManagement.Application.Errors;
 using LibraryManagement.Application.Response;
 using LibraryManagement.Domain.Entities;
@@ -11,71 +11,42 @@ namespace LibraryManagement.Application.CommandHandler
 {
     public class MemberCommandService : IMemberCommandService
     {
-        private IMemberRepository _memberRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private IMapper _mapper;
 
-        public MemberCommandService(IMemberRepository memberRepository, IMapper mapper)
+        public MemberCommandService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _memberRepository = memberRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
 
-        public async Task<List<MemberResponse>> GetAllMemberesAsync(string searchText)
-        {
-            var listOfMember = await _memberRepository.GetAllMemberesAsync();
 
-            if (!string.IsNullOrWhiteSpace(searchText))
-            {
-                listOfMember = listOfMember
-                    .Where(m =>
-                        !string.IsNullOrEmpty(m.Name) && m.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        !string.IsNullOrEmpty(m.Email) && m.Email.Contains(searchText, StringComparison.OrdinalIgnoreCase)
-                    )
-                    .ToList();
-            }
 
-            List<MemberResponse> responseMembers = listOfMember
-                .ConvertAll(x => _mapper.Map<MemberResponse>(x));
-
-            return responseMembers;
-        }
-
-        public async Task<MemberResponse?> GetMemberByIdAsync(Guid id)
-        {
-
-            Member? member = await _memberRepository.GetMemberByIdAsync(new MemberId(id));
-            if (member == null) { return null; }
-
-            var memberResponse = _mapper.Map<MemberResponse>(member);
-            return memberResponse;
-
-        }
-
-        public async Task<Result<MemberResponse>> CreateMemberAsync(string name, string email)
+        public async Task<Result<MemberResponse>> CreateMemberAsync(string name, string email, CancellationToken cancellationToken)
         {
             var newMember = new Member()
             {
-                Id = new MemberId(Guid.NewGuid()) ,
+                Id = new MemberId(Guid.NewGuid()),
                 Name = name,
                 Email = email,
                 MaxBooksAllowed = 5,
                 BorrowedBooksCount = 0,
-              
+
             };
 
             var newMemberResponse = _mapper.Map<MemberResponse>(newMember);
-            await _memberRepository.CreateMemberAsync(newMember);
-
+            await _unitOfWork.Members.CreateMemberAsync(newMember);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result.Ok(newMemberResponse);
+
         }
 
 
-
-        public async Task<Result> RemoveMemberAsync(Guid id)
+        public async Task<Result> RemoveMemberAsync(Guid id, CancellationToken cancellationToken)
         {
 
-            Member? member = await _memberRepository.GetMemberByIdAsync(new MemberId(id));
+            Member? member = await _unitOfWork.Members.GetMemberByIdAsync(new MemberId(id));
 
             if (member is null)
                 return Result.Fail(new EntityNotFoundError($"No Member ={id} found"));
@@ -84,18 +55,20 @@ namespace LibraryManagement.Application.CommandHandler
                 return Result.Fail(new UnableToDeleteError($"Member ={id} has borrowed books"));
 
 
-            await _memberRepository.RemoveMemberAsync(new MemberId(id));
+            await _unitOfWork.Members.RemoveMemberAsync(new MemberId(id));
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result.Ok();
         }
 
-        public async Task<Result> UpdateMemberAsync(Guid id, string name, string email)
+        public async Task<Result> UpdateMemberAsync(Guid id, string name, string email, CancellationToken cancellationToken)
         {
 
-            Member? member = await _memberRepository.GetMemberByIdAsync(new MemberId(id));
+            Member? member = await _unitOfWork.Members.GetMemberByIdAsync(new MemberId(id));
             if (member is null)
                 return Result.Fail(new EntityNotFoundError($"No Member ={id} found"));
 
-            await _memberRepository.UpdateMemberAsync(new MemberId(id), name, email);
+            await _unitOfWork.Members.UpdateMemberAsync(new MemberId(id), name, email);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result.Ok();
         }
 

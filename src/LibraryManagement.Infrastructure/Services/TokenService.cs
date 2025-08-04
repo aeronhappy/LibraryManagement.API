@@ -22,7 +22,7 @@ namespace LibraryManagement.Infrastructure.Services
             List<string> roles = user.Roles.Select(r => r.Name).ToList();
             List<Claim> claims = new()
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.Value.ToString()),
 
             };
 

@@ -1,6 +1,8 @@
 ﻿using FluentResults;
 using LibraryManagement.API.Services.Interface;
+using LibraryManagement.Application.Commands;
 using LibraryManagement.Application.Errors;
+using LibraryManagement.Application.Queries;
 using LibraryManagement.Application.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,16 +12,19 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly IRoleCommandService _roleService;
-        public RolesController(IRoleCommandService roleService)
+        private readonly IRoleQueryService _roleQuery;
+        private readonly IRoleCommandService _roleCommand;
+
+        public RolesController(IRoleQueryService roleQuery,IRoleCommandService roleCommand)
         {
-            _roleService = roleService;
+            _roleQuery = roleQuery;
+            _roleCommand = roleCommand;
         }
 
         [HttpGet()]
         public async Task<ActionResult<List<RoleResponse>>> GetListOfBook()
         {
-            var roles = await _roleService.GetAllRoleAsync();
+            var roles = await _roleQuery.GetAllRoleAsync();
             return Ok(roles);
         }
 
@@ -27,7 +32,7 @@ namespace LibraryManagement.API.Controllers
         [HttpGet("{roleId}")]
         public async Task<ActionResult<RoleResponse>> GetRoleById(Guid roleId)
         {
-            var bookResponse = await _roleService.GetRoleByIdAsync(roleId);
+            var bookResponse = await _roleQuery.GetRoleByIdAsync(roleId);
             if (bookResponse is null)
                 return NotFound();
 
@@ -38,7 +43,7 @@ namespace LibraryManagement.API.Controllers
         public async Task<ActionResult<RoleResponse>> AddRole([FromQuery] String roleName)
         {
            
-            Result<RoleResponse> roleResponse = await _roleService.CreateRoleAsync(name: roleName);
+            Result<RoleResponse> roleResponse = await _roleCommand.CreateRoleAsync(name: roleName, HttpContext.RequestAborted);
 
             if (roleResponse.HasError<ConflictError>(out var errors))
                 return NotFound(errors.FirstOrDefault()?.Message);

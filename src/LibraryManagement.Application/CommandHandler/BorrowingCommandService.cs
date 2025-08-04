@@ -58,7 +58,6 @@ namespace LibraryManagement.Application.CommandHandler
 
                 var borrowingService = new BorrowingService();
                 borrowingService.ProcessReturn(record!);
-
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 return Result.Ok();
             }
