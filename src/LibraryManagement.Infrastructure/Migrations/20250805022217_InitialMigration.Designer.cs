@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250804013859_InitialMigration")]
+    [Migration("20250805022217_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -34,15 +34,6 @@ namespace LibraryManagement.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("BorrowerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateBorrowed")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOverdue")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ISBN")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -55,8 +46,6 @@ namespace LibraryManagement.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BorrowerId");
 
                     b.ToTable("Books");
                 });
@@ -171,25 +160,16 @@ namespace LibraryManagement.Infrastructure.Migrations
                     b.ToTable("RoleUser");
                 });
 
-            modelBuilder.Entity("LibraryManagement.Domain.Entities.Book", b =>
-                {
-                    b.HasOne("LibraryManagement.Domain.Entities.Member", "Borrower")
-                        .WithMany("Books")
-                        .HasForeignKey("BorrowerId");
-
-                    b.Navigation("Borrower");
-                });
-
             modelBuilder.Entity("LibraryManagement.Domain.Entities.BorrowingRecord", b =>
                 {
                     b.HasOne("LibraryManagement.Domain.Entities.Book", "Book")
-                        .WithMany()
+                        .WithMany("BorrowingHistory")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LibraryManagement.Domain.Entities.Member", "Borrower")
-                        .WithMany()
+                        .WithMany("BorrowingHistory")
                         .HasForeignKey("BorrowerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -214,9 +194,14 @@ namespace LibraryManagement.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LibraryManagement.Domain.Entities.Book", b =>
+                {
+                    b.Navigation("BorrowingHistory");
+                });
+
             modelBuilder.Entity("LibraryManagement.Domain.Entities.Member", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("BorrowingHistory");
                 });
 #pragma warning restore 612, 618
         }

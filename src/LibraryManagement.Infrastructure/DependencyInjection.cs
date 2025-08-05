@@ -4,6 +4,8 @@ using LibraryManagement.Domain.Repositories;
 using LibraryManagement.Infrastructure.Configurations;
 using LibraryManagement.Infrastructure.Data;
 using LibraryManagement.Infrastructure.Data.Repositories;
+using LibraryManagement.Infrastructure.Queries;
+using LibraryManagement.Infrastructure.QueryHandler;
 using LibraryManagement.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -59,6 +61,11 @@ namespace LibraryManagement.Infrastructure
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordService, PasswordService>();
+
+            services.AddScoped<IBookQueryService, BookQueryService>();
+            services.AddScoped<IMemberQueryService, MemberQueryService>();
+            services.AddScoped<IRoleQueryService, RoleQueryService>();
+            services.AddScoped<IBorrowingQueryService, BorrowingQueryService>();
 
 
             return services;

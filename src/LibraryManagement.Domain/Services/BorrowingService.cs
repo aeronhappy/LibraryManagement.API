@@ -14,8 +14,8 @@ namespace LibraryManagement.Domain.Services
                 DateTime.UtcNow,
                 DateTime.UtcNow.AddDays(10));
 
-            member.IncreaseBorrowedBookCount(borrowingRecord);
-            book.MarkAsBorrowed(borrowingRecord);
+            member.IncreaseBorrowedBookCount();
+            book.MarkAsBorrowed();
 
             return borrowingRecord; //10 days
 
@@ -24,7 +24,7 @@ namespace LibraryManagement.Domain.Services
 
         public void ProcessReturn(BorrowingRecord record)
         {
-            record.Borrower.IncreaseBorrowedBookCount(record);
+            record.Borrower.IncreaseBorrowedBookCount();
             record.Book.MarkAsReturned();
             record.Process();
         }

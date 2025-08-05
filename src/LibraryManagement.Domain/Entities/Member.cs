@@ -11,26 +11,25 @@ namespace LibraryManagement.Domain.Entities
         public required string Email { get; set; }
         public int MaxBooksAllowed { get; set; }
         public int BorrowedBooksCount { get; set; }
-        public List<Book> Books { get; set; } = [];
+        public List<BorrowingRecord> BorrowingHistory { get; set; } = [];
 
-        public void IncreaseBorrowedBookCount(BorrowingRecord borrowingRecord)
+        public void IncreaseBorrowedBookCount()
         {
             if (BorrowedBooksCount >= MaxBooksAllowed)
             {
                 throw new MemberReachLimitException($"Cant borrow more than {MaxBooksAllowed}");
             }
             BorrowedBooksCount++;
-            Books.Add(borrowingRecord.Book);
         }
 
-        public void DecreaseBorrowedBookCount(BorrowingRecord borrowingRecord)
+        public void DecreaseBorrowedBookCount()
         {
             if (BorrowedBooksCount <= 0)
             {
                 throw new MemberCantReturnWithoutBorrowingException("Member cant return without borrowing books");
             }
             BorrowedBooksCount--;
-            Books.Remove(borrowingRecord.Book);
+           
         }
     }
 }

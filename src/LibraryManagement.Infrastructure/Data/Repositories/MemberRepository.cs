@@ -18,12 +18,6 @@ namespace LibraryManagement.API.Repositories
         }
 
 
-        public async Task<List<Member>> GetAllMemberesAsync()
-        {
-            return await _context.Members.ToListAsync();
-        }
-
-
         public async Task<Member?> GetMemberByIdAsync(MemberId id)
         {
             Member? member = await _context.Members.Where((x) => x.Id == id).FirstOrDefaultAsync();

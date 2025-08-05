@@ -8,16 +8,33 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Application.Response
 {
-    
+
     public class BorrowRecordResponse
     {
-        public  BorrowingRecordId Id { get; private set; }
-        public MemberId BorrowerId { get; private set; }
-        public Member Borrower { get; private set; } = null!;
-        public BookId BookId { get; private set; }
-        public Book Book { get; private set; } = null!;
-        public DateTime DateBorrowed { get; private set; }
-        public DateTime DateOverdue { get; private set; }
-        public DateTime? DateReturned { get; private set; }
+        public Guid Id { get; set; }
+        public BookBorrowedResponse Book { get; set; } = null!;
+        public BorrowerResponse Borrower { get; set; } = null!;
+        public DateTime DateBorrowed { get;  set; }
+        public DateTime DateOverdue { get;  set; }
+        public DateTime? DateReturned { get;  set; }
+    }
+
+
+    public class MemberBorrowRecordResponse
+    {
+        public Guid Id { get; private set; }
+        public BorrowerResponse Borrower { get;  set; } = null!;
+        public DateTime DateBorrowed { get;  set; }
+        public DateTime DateOverdue { get;  set; }
+        public DateTime? DateReturned { get;  set; }
+    }
+
+    public class BookBorrowRecordResponse
+    {
+        public Guid Id { get; private set; }
+        public BookBorrowedResponse Book { get;  set; } = null!;
+        public DateTime DateBorrowed { get;  set; }
+        public DateTime DateOverdue { get;  set; }
+        public DateTime? DateReturned { get;  set; }
     }
 }

@@ -20,10 +20,6 @@ namespace LibraryManagement.Infrastructure.Data.Repositories
 
         }
 
-        public async Task<List<Book>> GetAllBooksAsync()
-        {
-            return await _context.Books.ToListAsync();
-        }
 
         public async Task<Book?> GetBookByIdAsync(BookId id)
         {

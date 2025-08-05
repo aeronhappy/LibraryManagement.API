@@ -12,8 +12,7 @@ namespace LibraryManagement.Infrastructure.Data.Configuration
             book.HasKey(b => b.Id);
             book.Property(b => b.Id)
                 .HasConversion(b => b.Value, value => new BookId(value));
-            book.Property(b => b.BorrowerId)
-                .HasConversion(b => b!.Value, value => new MemberId(value));
+          
         }
     }
 }

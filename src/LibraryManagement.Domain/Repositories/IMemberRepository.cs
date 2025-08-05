@@ -6,7 +6,6 @@ namespace LibraryManagement.Domain.Repositories
 {
     public interface IMemberRepository
     {
-        Task<List<Member>> GetAllMemberesAsync();
         Task<Member?> GetMemberByIdAsync(MemberId id);
         Task CreateMemberAsync(Member memberModel);
         Task RemoveMemberAsync(MemberId id);

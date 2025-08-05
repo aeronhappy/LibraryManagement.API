@@ -22,11 +22,6 @@ namespace LibraryManagement.Infrastructure.Data.Repositories
             await _context.BorrowingRecords.AddAsync(borrowingRecord);
         }
 
-        public async Task<List<BorrowingRecord>> GetAllBorrowingRecord()
-        {
-           return await _context.BorrowingRecords.ToListAsync();
-        }
-
         public async Task<BorrowingRecord?> GetByIdAsync(BorrowingRecordId id)
         {
             return await _context.BorrowingRecords
@@ -45,13 +40,6 @@ namespace LibraryManagement.Infrastructure.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<BorrowingRecord?> GetLatestBorrowedRecordByBookId(BookId id)
-        {
-            return await _context.BorrowingRecords
-                 .Where(br => br.BookId == id)
-                 .Include(br => br.Book)
-                 .Include(br => br.Borrower)
-                 .FirstOrDefaultAsync();
-        }
+       
     }
 }

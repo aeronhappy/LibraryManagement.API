@@ -2,8 +2,8 @@
 using LibraryManagement.API.Request;
 using LibraryManagement.API.Services.Interface;
 using LibraryManagement.Application.Errors;
-using LibraryManagement.Application.Queries;
 using LibraryManagement.Application.Response;
+using LibraryManagement.Infrastructure.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.API.Controllers

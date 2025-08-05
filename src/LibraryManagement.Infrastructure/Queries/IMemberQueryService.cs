@@ -1,7 +1,7 @@
 ﻿using FluentResults;
 using LibraryManagement.Application.Response;
 
-namespace LibraryManagement.Application.Queries
+namespace LibraryManagement.Infrastructure.Queries
 {
     public interface IMemberQueryService
     {

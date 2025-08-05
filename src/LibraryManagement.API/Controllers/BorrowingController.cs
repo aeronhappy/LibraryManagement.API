@@ -1,6 +1,9 @@
 ﻿using FluentResults;
 using LibraryManagement.Application.Commands;
 using LibraryManagement.Application.Errors;
+using LibraryManagement.Application.Response;
+using LibraryManagement.Domain.Entities;
+using LibraryManagement.Infrastructure.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +16,7 @@ namespace LibraryManagement.API.Controllers
         private readonly IBorrowingQueryService _borrowingQuery;
         private readonly IBorrowingCommandService _borrowingCommand;
 
-        public BorrowingController(IBorrowingQueryService borrowingQuery , IBorrowingCommandService borrowingCommand)
+        public BorrowingController(IBorrowingQueryService borrowingQuery, IBorrowingCommandService borrowingCommand)
         {
             _borrowingQuery = borrowingQuery;
             _borrowingCommand = borrowingCommand;
@@ -59,6 +62,14 @@ namespace LibraryManagement.API.Controllers
             return Ok();
         }
 
-   
+
+        [HttpGet("records")]
+        public async Task<ActionResult<List<BorrowingRecord>>> GetListOfBorrowingRecords([FromQuery] string searchText = "", [FromQuery] DateTime? dateTime = null)
+        {
+            var borrowingRecords = await _borrowingQuery.GetAllBorrowingRecord(searchText ,dateTime);
+            return Ok(borrowingRecords);
+        }
+
+
     }
 }
