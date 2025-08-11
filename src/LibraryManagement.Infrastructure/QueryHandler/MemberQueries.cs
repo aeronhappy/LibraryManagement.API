@@ -11,12 +11,12 @@ using System.Net;
 
 namespace LibraryManagement.Infrastructure.QueryHandler
 {
-    public class MemberQueryService : IMemberQueryService
+    public class MemberQueries : IMemberQueries
     {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
 
-        public MemberQueryService(ApplicationDbContext context, IMapper mapper)
+        public MemberQueries(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -30,8 +30,9 @@ namespace LibraryManagement.Infrastructure.QueryHandler
 
             if (!string.IsNullOrWhiteSpace(searchText))
             {
-                query = query.Where(m => m.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)
-                                      || m.Email.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+                var loweredSearchText = searchText.ToLower();
+                query = query.Where(m => m.Name.Contains(loweredSearchText)
+                                      || m.Email.Contains(loweredSearchText));
             }
 
             return await query.ProjectTo<MemberResponse>(_mapper.ConfigurationProvider).ToListAsync();

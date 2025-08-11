@@ -57,7 +57,7 @@ namespace LibraryManagement.Domain.Entities
         {
             if (DateReturned.HasValue)
                 throw new BookAlreadyReturnedException("Can't return not borrowed Book");
-            DateReturned = DateTime.Now;
+            DateReturned = DateTime.UtcNow;
           
         }
 

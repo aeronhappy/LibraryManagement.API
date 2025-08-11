@@ -2,7 +2,7 @@
 
 namespace LibraryManagement.Infrastructure.Queries
 {
-    public interface IBookQueryService
+    public interface IBookQueries
     {
         Task<BookResponse?> GetBookByIdAsync(Guid bookId);
         Task<List<BookResponse>> GetAllBooksAsync(string searchText);

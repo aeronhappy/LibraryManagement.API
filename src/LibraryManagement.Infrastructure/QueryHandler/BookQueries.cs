@@ -10,12 +10,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Infrastructure.QueryHandler
 {
-    public class BookQueryService : IBookQueryService
+    public class BookQueries : IBookQueries
     {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
 
-        public BookQueryService(ApplicationDbContext context, IMapper mapper)
+        public BookQueries(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -54,8 +54,10 @@ namespace LibraryManagement.Infrastructure.QueryHandler
             IQueryable<Book> query = _context.Books.Where(b=>b.BorrowingHistory.Any(br => br.DateReturned == null && br.DateOverdue < DateTime.UtcNow));
             if (!string.IsNullOrWhiteSpace(searchText))
             {
-                query = query.Where(book => book.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase)
-                                || book.Author.Contains(searchText, StringComparison.OrdinalIgnoreCase)  );
+
+                var loweredSearchText = searchText.ToLower();
+                query = query.Where(book => book.Title.Contains(loweredSearchText)
+                                         || book.Author.Contains(loweredSearchText));
             }
             return await query.ProjectTo<BookResponse>(_mapper.ConfigurationProvider).ToListAsync();
 

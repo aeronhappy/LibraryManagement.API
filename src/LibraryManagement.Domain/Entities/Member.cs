@@ -9,9 +9,16 @@ namespace LibraryManagement.Domain.Entities
         public required MemberId Id { get; set; }
         public required string Name { get; set; }
         public required string Email { get; set; }
+        public string? ProfilePictureUrl { get; set; }
         public int MaxBooksAllowed { get; set; }
         public int BorrowedBooksCount { get; set; }
         public List<BorrowingRecord> BorrowingHistory { get; set; } = [];
+
+
+        public void SetProfilePicture(string url)
+        {
+            ProfilePictureUrl = url;
+        }
 
         public void IncreaseBorrowedBookCount()
         {
@@ -29,7 +36,7 @@ namespace LibraryManagement.Domain.Entities
                 throw new MemberCantReturnWithoutBorrowingException("Member cant return without borrowing books");
             }
             BorrowedBooksCount--;
-           
+
         }
     }
 }

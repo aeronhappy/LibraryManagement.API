@@ -12,10 +12,10 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly IRoleQueryService _roleQuery;
-        private readonly IRoleCommandService _roleCommand;
+        private readonly IRoleQueries _roleQuery;
+        private readonly IRoleCommands _roleCommand;
 
-        public RolesController(IRoleQueryService roleQuery,IRoleCommandService roleCommand)
+        public RolesController(IRoleQueries roleQuery,IRoleCommands roleCommand)
         {
             _roleQuery = roleQuery;
             _roleCommand = roleCommand;

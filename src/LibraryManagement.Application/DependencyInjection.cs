@@ -12,12 +12,11 @@ namespace LibraryManagement.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             // Register Services
-            services.AddScoped<IBookCommandSerice, BookCommandService>();
-            services.AddScoped<IMemberCommandService, MemberCommandService>();
-            services.AddScoped<IAuthenticationCommandService, AuthenticationCommandService>();
-            services.AddScoped<IRoleCommandService, RoleCommandService>();
-            services.AddScoped<IBorrowingCommandService, BorrowingCommandService>();
-
+            services.AddScoped<IBookCommands, BookCommands>();
+            services.AddScoped<IMemberCommands, MemberCommands>();
+            services.AddScoped<IAuthenticationCommands, AuthenticationCommands>();
+            services.AddScoped<IRoleCommands, RoleCommandSs>();
+            services.AddScoped<IBorrowingCommands, BorrowingCommands>();
 
             return services;
         }

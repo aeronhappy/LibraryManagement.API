@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Infrastructure.QueryHandler
 {
-    public class RoleQueryService : IRoleQueryService
+    public class RoleQueries : IRoleQueries
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public RoleQueryService(ApplicationDbContext context, IMapper mapper)
+        public RoleQueries(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

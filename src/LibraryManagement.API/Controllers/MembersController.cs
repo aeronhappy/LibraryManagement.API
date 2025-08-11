@@ -15,15 +15,17 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
-        private readonly IMemberQueryService _memberQuery;
-        private readonly IMemberCommandService _memberCommand;
+        private readonly IMemberQueries _memberQuery;
+        private readonly IMemberCommands _memberCommand;
 
-        public MembersController(IMemberQueryService memberQuery,IMemberCommandService memberCommand)
+        public MembersController(IMemberQueries memberQuery, IMemberCommands memberCommand)
         {
             _memberQuery = memberQuery;
             _memberCommand = memberCommand;
         }
 
+        
+        [Authorize(Roles = "Librarian")]
         [HttpGet()]
         public async Task<ActionResult<List<MemberResponse>>> GetListOfMember([FromQuery] string searchText = "")
         {
@@ -48,7 +50,7 @@ namespace LibraryManagement.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MemberResponse>> GetMemberById(Guid id)
         {
-          
+
             var memberResponse = await _memberQuery.GetMemberByIdAsync(id);
             if (memberResponse is null)
                 return NotFound();
@@ -59,7 +61,7 @@ namespace LibraryManagement.API.Controllers
         [HttpPost()]
         public async Task<ActionResult<MemberResponse>> CreateMember(AddMemberRequest createMember)
         {
-            var memberResponse = await _memberCommand.CreateMemberAsync(createMember.Name, createMember.Email,HttpContext.RequestAborted);
+            var memberResponse = await _memberCommand.CreateMemberAsync(createMember.Name, createMember.Email, HttpContext.RequestAborted);
             return Ok(memberResponse.Value);
         }
 
@@ -80,11 +82,48 @@ namespace LibraryManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateMember(Guid id, AddMemberRequest createMember)
         {
-            Result result =   await _memberCommand.UpdateMemberAsync(id, createMember.Name, createMember.Email, HttpContext.RequestAborted);
+            Result result = await _memberCommand.UpdateMemberAsync(id, createMember.Name, createMember.Email, HttpContext.RequestAborted);
             if (result.HasError<EntityNotFoundError>(out var errors))
                 return NotFound(errors.FirstOrDefault()?.Message);
 
             return Ok();
+        }
+
+        [Authorize]
+        [HttpPut("profilePicture")]
+        public async Task<ActionResult> UpdateProfilePic([FromForm] ProfilePictureRequest profilePictureRequest)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var newGuid = Guid.Parse(userId!);
+
+            if (profilePictureRequest is null || profilePictureRequest.Image.Length is 0)
+                return BadRequest("No file uploaded.");
+
+            var extension = Path.GetExtension(profilePictureRequest.Image.FileName);
+            var fileName = $"{Guid.NewGuid()}{extension}";
+
+
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await profilePictureRequest.Image.CopyToAsync(stream);
+            }
+
+            var relativePath = $"/uploads/{fileName}";
+
+
+            Result result = await _memberCommand.UpdateProfilePictureAsync(newGuid, relativePath, HttpContext.RequestAborted);
+
+            if (result.HasError<EntityNotFoundError>(out var errors))
+                return NotFound(errors.FirstOrDefault()?.Message);
+
+            return Ok("Profile picture updated.");
         }
     }
 }

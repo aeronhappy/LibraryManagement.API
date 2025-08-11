@@ -23,5 +23,6 @@ namespace LibraryManagement.Infrastructure.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<BorrowingRecord> BorrowingRecords { get; set; }
+        public DbSet<BorrowingRequest> BorrowingRequests { get; set; }
     }
 }

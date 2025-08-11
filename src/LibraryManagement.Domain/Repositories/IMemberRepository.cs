@@ -9,7 +9,6 @@ namespace LibraryManagement.Domain.Repositories
         Task<Member?> GetMemberByIdAsync(MemberId id);
         Task CreateMemberAsync(Member memberModel);
         Task RemoveMemberAsync(MemberId id);
-        Task UpdateMemberAsync(MemberId id, string name, string email);
-
+        Task UpdateMemberAsync(MemberId id, string? name, string? email);
     }
 }

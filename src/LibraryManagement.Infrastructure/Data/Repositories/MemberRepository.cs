@@ -43,16 +43,18 @@ namespace LibraryManagement.API.Repositories
             _context.Members.Remove(member);
         }
 
-        public async Task UpdateMemberAsync(MemberId id, string name, string email)
+        public async Task UpdateMemberAsync(MemberId id, string? name, string? email)
         {
             Member? member = await _context.Members.Where((x) => x.Id == id).FirstOrDefaultAsync();
             if (member == null) { return; }
 
-
-            member.Name = name;
-            member.Email = email;
+            if(name is not null)
+                member.Name = name;
+            if(email is not null)
+                member.Email = email;
+           
 
         }
-       
+
     }
 }

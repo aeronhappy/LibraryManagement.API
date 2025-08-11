@@ -62,10 +62,10 @@ namespace LibraryManagement.Infrastructure
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordService, PasswordService>();
 
-            services.AddScoped<IBookQueryService, BookQueryService>();
-            services.AddScoped<IMemberQueryService, MemberQueryService>();
-            services.AddScoped<IRoleQueryService, RoleQueryService>();
-            services.AddScoped<IBorrowingQueryService, BorrowingQueryService>();
+            services.AddScoped<IBookQueries, BookQueries>();
+            services.AddScoped<IMemberQueries, MemberQueries>();
+            services.AddScoped<IRoleQueries, RoleQueries>();
+            services.AddScoped<IBorrowingQueries, BorrowingQueries>();
 
 
             return services;

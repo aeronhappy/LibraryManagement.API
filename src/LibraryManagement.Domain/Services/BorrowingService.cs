@@ -5,6 +5,16 @@ namespace LibraryManagement.Domain.Services
 {
     public class BorrowingService
     {
+        public BorrowingRequest BorrowingBookRequest(Member member, Book book)
+        {
+            var borrowingRequest = BorrowingRequest.Create(
+                member.Id,
+                book.Id);
+
+            return borrowingRequest;
+        }
+
+
         public BorrowingRecord BorrowBook(Member member, Book book)
         {
 
@@ -12,7 +22,7 @@ namespace LibraryManagement.Domain.Services
                 member.Id,
                 book.Id,
                 DateTime.UtcNow,
-                DateTime.UtcNow.AddDays(10));
+                DateTime.UtcNow.AddDays(3));
 
             member.IncreaseBorrowedBookCount();
             book.MarkAsBorrowed();
@@ -24,7 +34,7 @@ namespace LibraryManagement.Domain.Services
 
         public void ProcessReturn(BorrowingRecord record)
         {
-            record.Borrower.IncreaseBorrowedBookCount();
+            record.Borrower.DecreaseBorrowedBookCount();
             record.Book.MarkAsReturned();
             record.Process();
         }

@@ -9,12 +9,12 @@ using LibraryManagement.Domain.ValueObjects;
 
 namespace LibraryManagement.Application.CommandHandler
 {
-    public class BookCommandService : IBookCommandSerice
+    public class BookCommands : IBookCommands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BookCommandService(IUnitOfWork unitOfWork,IMapper mapper)
+        public BookCommands(IUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

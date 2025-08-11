@@ -5,11 +5,11 @@ namespace LibraryManagement.Domain.Entities
 
     public class User
     {
-        public UserId Id { get; private set; }
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public string PasswordHash { get; private set; }
-        public List<Role> Roles { get; private set; }
+        public UserId Id { get; private set; } = null!;
+        public string Name { get; private set; } = null!;
+        public string Email { get; private set; } = null!;
+        public string PasswordHash { get; private set; } = null!;
+        public List<Role> Roles { get; private set; } = [];
         public DateTime CreatedAt { get; private set; }
         public DateTime? LastLogin { get; private set; }
 

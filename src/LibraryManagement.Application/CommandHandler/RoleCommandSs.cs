@@ -9,12 +9,12 @@ using LibraryManagement.Domain.ValueObjects;
 
 namespace LibraryManagement.Application.CommandHandler
 {
-    public class RoleCommandService : IRoleCommandService
+    public class RoleCommandSs : IRoleCommands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public RoleCommandService(IUnitOfWork unitOfWork, IMapper mapper)
+        public RoleCommandSs(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

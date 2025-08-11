@@ -3,7 +3,7 @@ using LibraryManagement.Application.Response;
 
 namespace LibraryManagement.API.Services.Interface
 {
-    public interface IBookCommandSerice
+    public interface IBookCommands
     {
       
         Task<Result<BookResponse>> AddBookAsync(string title, string author, string isbn, CancellationToken cancellationToken);

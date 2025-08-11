@@ -7,14 +7,14 @@ using LibraryManagement.Domain.ValueObjects;
 
 namespace LibraryManagement.Application.CommandHandler
 {
-    public class AuthenticationCommandService : IAuthenticationCommandService
+    public class AuthenticationCommands : IAuthenticationCommands
     {
 
         private readonly IPasswordService _passwordService;
         private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AuthenticationCommandService(
+        public AuthenticationCommands(
             IPasswordService passwordService,
             ITokenService tokenService,
             IUnitOfWork unitOfWork)

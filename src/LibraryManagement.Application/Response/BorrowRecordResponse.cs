@@ -14,9 +14,9 @@ namespace LibraryManagement.Application.Response
         public Guid Id { get; set; }
         public BookBorrowedResponse Book { get; set; } = null!;
         public BorrowerResponse Borrower { get; set; } = null!;
-        public DateTime DateBorrowed { get;  set; }
-        public DateTime DateOverdue { get;  set; }
-        public DateTime? DateReturned { get;  set; }
+        public DateTimeOffset DateBorrowed { get;  set; }
+        public DateTimeOffset DateOverdue { get;  set; }
+        public DateTimeOffset? DateReturned { get;  set; }
     }
 
 
@@ -24,17 +24,17 @@ namespace LibraryManagement.Application.Response
     {
         public Guid Id { get; private set; }
         public BorrowerResponse Borrower { get;  set; } = null!;
-        public DateTime DateBorrowed { get;  set; }
-        public DateTime DateOverdue { get;  set; }
-        public DateTime? DateReturned { get;  set; }
+        public DateTimeOffset DateBorrowed { get;  set; }
+        public DateTimeOffset DateOverdue { get;  set; }
+        public DateTimeOffset? DateReturned { get;  set; }
     }
 
     public class BookBorrowRecordResponse
     {
         public Guid Id { get; private set; }
         public BookBorrowedResponse Book { get;  set; } = null!;
-        public DateTime DateBorrowed { get;  set; }
-        public DateTime DateOverdue { get;  set; }
-        public DateTime? DateReturned { get;  set; }
+        public DateTimeOffset DateBorrowed { get;  set; }
+        public DateTimeOffset DateOverdue { get;  set; }
+        public DateTimeOffset? DateReturned { get;  set; }
     }
 }

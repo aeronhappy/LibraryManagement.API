@@ -10,9 +10,9 @@ namespace LibraryManagement.API.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationCommandService _authenticationService;
+        private readonly IAuthenticationCommands _authenticationService;
 
-        public AuthenticationController(IAuthenticationCommandService authenticationService)
+        public AuthenticationController(IAuthenticationCommands authenticationService)
         {
             _authenticationService = authenticationService;
         }
