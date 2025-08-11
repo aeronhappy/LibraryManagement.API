@@ -24,8 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryManagement.Application\LibraryManagement.Application.csproj" />
-    <ProjectReference Include="..\LibraryManagement.Infrastructure\LibraryManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\Borrowing\Borrowing.Controller\Borrowing.Controller.csproj" />
+    <ProjectReference Include="..\Borrowing\Borrowing.Infrastructure\Borrowing.Infrastructure.csproj" />
+    <ProjectReference Include="..\Identity\Identity.Controller\Identity.Controller.csproj" />
+    <ProjectReference Include="..\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
