@@ -22,9 +22,25 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
 
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
+    options.SwaggerDoc("v1", new() { Title = "Borrowing API", Version = "v1" });
+
+
+    var assemblies = new[]
+    {
+        Assembly.GetExecutingAssembly(),                          
+        typeof(BooksController).Assembly,                           
+        typeof(AuthenticationController).Assembly,                    
+        typeof(Borrowing.Application.AssemblyReference).Assembly,    
+        typeof(Identity.Application.AssemblyReference).Assembly       
+        
+    };
+
+    foreach (var asm in assemblies.Distinct())
+    {
+        var xml = Path.Combine(AppContext.BaseDirectory, $"{asm.GetName().Name}.xml");
+        if (File.Exists(xml))
+            options.IncludeXmlComments(xml, includeControllerXmlComments: true);
+    }
 
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {

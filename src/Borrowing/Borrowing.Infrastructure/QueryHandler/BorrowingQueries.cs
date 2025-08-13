@@ -108,5 +108,24 @@ namespace Borrowing.Infrastructure.QueryHandler
 
             return borrowingRecord;
         }
+
+        public async Task<List<BorrowRequestResponse>> GetBorrowRequestAsync(string searchText)
+        {
+            IQueryable<BorrowingRequest> query = _context.BorrowingRequests.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+
+                var loweredSearchText = searchText.ToLower();
+                query = query.Where(br =>
+                                    br.Book.Title.ToLower().Contains(loweredSearchText) ||
+                                    br.Book.Author.ToLower().Contains(loweredSearchText) ||
+                                    br.Borrower.Name.ToLower().Contains(loweredSearchText) ||
+                                    br.Borrower.Email.ToLower().Contains(loweredSearchText));
+            }
+
+          
+            return await query.ProjectTo<BorrowRequestResponse>(_mapper.ConfigurationProvider).ToListAsync();
+        }
     }
 }

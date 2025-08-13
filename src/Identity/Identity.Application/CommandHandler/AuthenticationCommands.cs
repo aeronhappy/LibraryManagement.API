@@ -31,6 +31,7 @@ namespace Identity.Application.CommandHandler
         public async Task<AuthenticationResponse> SignInAsync(string email, string password, CancellationToken cancellationToken)
         {
             User? existingUser = await _unitOfWork.Users.GetByEmailAsync(email);
+            
             if (existingUser is null)
             {
                 return new AuthenticationResponse
@@ -50,11 +51,13 @@ namespace Identity.Application.CommandHandler
             }
             existingUser.UpdateLastLogin(DateTime.UtcNow);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return new AuthenticationResponse
             {
                 IsSuccess = true,
                 Message = "Login Successfull",
-                AccessToken = _tokenService.GenerateToken(existingUser!)
+                AccessToken = _tokenService.GenerateToken(existingUser!),
+                Roles = existingUser.Roles.Select(r => r.Name).ToList()
             };
         }
 
@@ -97,7 +100,9 @@ namespace Identity.Application.CommandHandler
             {
                 IsSuccess = true,
                 Message = "User registered successfully.",
-                AccessToken = accessToken
+                AccessToken = accessToken,
+                Roles = user.Roles.Select(r => r.Name).ToList()
+
             };
         }
 

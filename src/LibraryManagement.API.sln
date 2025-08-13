@@ -27,13 +27,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Borrowing.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Borrowing.Domain", "Borrowing\Borrowing.Domain\Borrowing.Domain.csproj", "{8DF49B4F-ED34-4E5C-8586-B4EE6B460557}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManagement.SharedKernel", "LibraryManagement.SharedKernel\LibraryManagement.SharedKernel.csproj", "{48FE3558-C75F-4BE1-9DBC-956B834AA4A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManagement.SharedKernel", "LibraryManagement.SharedKernel\LibraryManagement.SharedKernel.csproj", "{48FE3558-C75F-4BE1-9DBC-956B834AA4A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManagement.Contracts", "LibraryManagement.Contracts\LibraryManagement.Contracts.csproj", "{1738E82B-F5D3-4A69-8F71-C2AD3DBDF48E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManagement.Contracts", "LibraryManagement.Contracts\LibraryManagement.Contracts.csproj", "{1738E82B-F5D3-4A69-8F71-C2AD3DBDF48E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.IntegrationEvent", "Identity\Identity.IntegrationEvent\Identity.IntegrationEvent.csproj", "{33E8D0EE-20B2-4E25-96C1-4E10834A75A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.IntegrationEvent", "Identity\Identity.IntegrationEvent\Identity.IntegrationEvent.csproj", "{33E8D0EE-20B2-4E25-96C1-4E10834A75A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Borrowing.IntegrationEvent", "Borrowing\Borrowing.IntegrationEvent\Borrowing.IntegrationEvent.csproj", "{D1FE937E-CA68-4D0D-A666-CB86224E550B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Borrowing.IntegrationEvent", "Borrowing\Borrowing.IntegrationEvent\Borrowing.IntegrationEvent.csproj", "{D1FE937E-CA68-4D0D-A666-CB86224E550B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

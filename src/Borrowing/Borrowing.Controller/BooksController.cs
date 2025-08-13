@@ -79,7 +79,7 @@ namespace Borrowing.Controller
         /// </summary>
         /// <param name="addNewBook">The details of the new book to add.</param>
         /// <returns>The created book.</returns>
-        [Authorize(Roles = "Librarian")]
+        [Authorize(Roles = "Librarian,Admin")]
         [HttpPost("create")]
         public async Task<ActionResult<BookResponse>> AddNewBook(AddBookRequest addNewBook)
         {
@@ -99,7 +99,7 @@ namespace Borrowing.Controller
         /// <param name="bookId">The ID of the book to delete.</param>
         /// <response code="404">If book not found</response>
 
-        [Authorize(Roles = "Librarian")]
+        [Authorize(Roles = "Librarian,Admin")]
         [HttpDelete("{bookId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -119,7 +119,7 @@ namespace Borrowing.Controller
         /// </summary>
         /// <param name="bookId">The ID of the book to update.</param>
         /// <param name="newBook">The updated book details.</param>
-        [Authorize(Roles = "Librarian")]
+        [Authorize(Roles = "Librarian,Admin")]
         [HttpPut("{bookId}")]
         public async Task<ActionResult> UpdateBook(Guid bookId, AddBookRequest newBook)
         {
